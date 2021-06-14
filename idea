@@ -1,0 +1,10 @@
+client:
+    QR_ID
+    name
+    description
+    date created
+    last access
+    size
+    color
+    function
+    image path
