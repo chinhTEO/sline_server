@@ -1,3 +1,6 @@
 server:
-  DBpath: 'sqlite:///db/server.db'
+  DBpath: "mysql+mysqlconnector://sline:sline@localhost/slineDB"
+  DBname: slineDB
+  DBuser: sline
+  DBpasswd: sline
   ImgPath: './static/img'

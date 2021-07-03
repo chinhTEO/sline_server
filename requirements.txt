@@ -3,3 +3,4 @@ Flask-RESTful
 Flask-SQLAlchemy
 PyYAML
 Werkzeug
+mysql-connector-python

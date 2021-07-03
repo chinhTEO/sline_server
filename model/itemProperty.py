@@ -96,7 +96,6 @@ class itemPropertyDB(db.Model):
                 }
 
             def saveToDB(self):
-
                 if self.image_1:
                     self.image_1_filename = "{}.jpg".format(uuid.uuid4().hex)
                 
