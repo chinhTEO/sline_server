@@ -1,17 +1,10 @@
-from flask import Flask
-from flask_restful import Resource, Api, reqparse
-from flask_sqlalchemy import SQLAlchemy
+from flask_restful import Resource, reqparse
 from serverCfg import ServerCfg
 import werkzeug
+import random
+from model.itemProperty import itemPropertyDB
+from baseServices import db, api, app
 
-cfg = ServerCfg.getInstance()
-app = Flask(__name__)
-api = Api(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = cfg.DBpath
-db = SQLAlchemy(app)
-
-
-            
 # class Item(serverDB.getInstance().DB.Model):
 #     __tablename__ = 'Item'
 #     db = serverDB.getInstance().DB
@@ -20,25 +13,49 @@ db = SQLAlchemy(app)
 
 class HelloWorld(Resource):
     def get(self):
-        serverCfg = ServerCfg.getInstance()
-        return {'hello': serverCfg.DBpath}
+        return {'status': 'OK',
+                'msg': 'hello'}
+
 
 
 class NewItem(Resource):
     def post(self):
         parse = reqparse.RequestParser()
-        parse.add_argument('file', type=werkzeug.datastructures.FileStorage, location='files')
+        parse.add_argument('QRid', required=True, type=int, location='form')
         parse.add_argument('name', required=True, type=str, location='form')
         parse.add_argument('description', required=True, type=str, location='form')
-        parse.add_argument('color', required=True, type=str, location='form')
-        args = parse.parse_args()
-        audioFile = args['file']
-        audioFile.save("your_file_name.jpg")
-        return {'out':'ok',
-                'name': args['name'],
-                'des': args['description'],
-                'color': args['color']}
 
+        parse.add_argument('size_1', required=True, type=int, location='form')
+        parse.add_argument('size_2', required=True, type=int, location='form')
+        parse.add_argument('size_3', required=True, type=int, location='form')
+        parse.add_argument('color', required=True, type=str, location='form')
+        parse.add_argument('function', required=True, type=str, location='form')
+
+        parse.add_argument('image_1', type=werkzeug.datastructures.FileStorage, location='files')
+        parse.add_argument('image_2', type=werkzeug.datastructures.FileStorage, location='files')
+        parse.add_argument('image_3', type=werkzeug.datastructures.FileStorage, location='files')
+        parse.add_argument('image_4', type=werkzeug.datastructures.FileStorage, location='files')
+
+        args = parse.parse_args()
+
+        item = itemPropertyDB()
+        item.setPropertyByArgs(args)
+
+        print(item.toDic())
+
+        item.saveToDB()
+
+        return {'status': 'OK',
+                'msg': 'upload successfully'}
+
+class checkItem(Resource):
+    def get(self,QRid):
+        print(QRid)
+        item = itemPropertyDB()
+        return item.getItemByID(QRid)
+
+
+api.add_resource(checkItem,'/utility/check/<int:QRid>')
 api.add_resource(NewItem,'/new')
 api.add_resource(HelloWorld,'/')
 

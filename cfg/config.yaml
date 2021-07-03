@@ -1,3 +1,3 @@
 server:
   DBpath: 'sqlite:///db/server.db'
-
+  ImgPath: './static/img'
