@@ -6,6 +6,8 @@ class ServerCfg:
     __instance = None
     DBpath = ""
     ImgPath = ""
+    sphinxSearchServer = '127.0.0.1'
+    sphinxSearchPort = 9312
 
     @staticmethod 
     def getInstance():
@@ -19,6 +21,8 @@ class ServerCfg:
             config = yaml.safe_load(file)
             self.DBpath = config['server']['DBpath']
             self.ImgPath = config['server']['ImgPath']
+            self.sphinxSearchServer = config['server']['sphinxSearchServer']
+            self.sphinxSearchPort = config['server']['sphinxSearchPort']
 
     def __init__(self):
         """ Virtually private constructor. """

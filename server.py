@@ -3,13 +3,24 @@ from serverCfg import ServerCfg
 import werkzeug
 import random
 from model.itemProperty import itemPropertyDB
-from baseServices import db, api, app
+from baseServices import db, api, app, sphixSeachClient
 
 # class Item(serverDB.getInstance().DB.Model):
 #     __tablename__ = 'Item'
 #     db = serverDB.getInstance().DB
 #     QR_ID = db.Column(db.Integer, primary_key=True)
 
+class LookupItem(Resource):
+    def get(self):
+        parse = reqparse.RequestParser()
+        parse.add_argument('searchStr', required=True, type=str, location='form')
+        parse.add_argument('color', required=True, type=str, location='form')
+        args = parse.parse_args()
+
+        result = sphixSeachClient.search(args['searchStr'])
+        print(result)
+
+        return result
 
 class HelloWorld(Resource):
     def get(self):
@@ -18,7 +29,7 @@ class HelloWorld(Resource):
 
 
 
-class NewItem(Resource):
+class ItemProperty(Resource):
     def post(self):
         parse = reqparse.RequestParser()
         parse.add_argument('QRid', required=True, type=int, location='form')
@@ -48,15 +59,15 @@ class NewItem(Resource):
         return {'status': 'OK',
                 'msg': 'upload successfully'}
 
-class checkItem(Resource):
+class findItem(Resource):
     def get(self,QRid):
         print(QRid)
         item = itemPropertyDB()
         return item.getItemByID(QRid)
 
-
-api.add_resource(checkItem,'/utility/check/<int:QRid>')
-api.add_resource(NewItem,'/new')
+api.add_resource(findItem,'/utility/check/<int:QRid>')
+api.add_resource(LookupItem,'/utility/lookup')
+api.add_resource(ItemProperty,'/new')
 api.add_resource(HelloWorld,'/')
 
 if __name__ == '__main__':      
