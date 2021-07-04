@@ -76,10 +76,22 @@ class itemPropertyDB(db.Model):
                 item['size_3'] = results.size_3
                 item['color'] = results.color
                 item['function'] = results.function
-                item['image_1_filename'] = results.image_1_filename
-                item['image_2_filename'] = results.image_2_filename
-                item['image_3_filename'] = results.image_3_filename
-                item['image_4_filename'] = results.image_4_filename
+                if results.image_1_filename:
+                    item['image_1_filename'] = results.image_1_filename
+                else:
+                    item['image_1_filename'] = ""
+                if results.image_2_filename:
+                    item['image_2_filename'] = results.image_2_filename
+                else:
+                    item['image_2_filename'] = ""
+                if results.image_3_filename:
+                    item['image_3_filename'] = results.image_3_filename
+                else:
+                    item['image_3_filename'] = ""
+                if results.image_4_filename:
+                    item['image_4_filename'] = results.image_4_filename
+                else:
+                    item['image_4_filename'] = ""
                 return jsonify(item)
 
             def toDic(self):
