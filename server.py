@@ -39,7 +39,11 @@ class ItemProperty(Resource):
         parse.add_argument('color', required=True, type=str, location='form')
         parse.add_argument('function', required=True, type=str, location='form')
 
+<<<<<<< HEAD
         parse.add_argument('images'  , action='append', type=werkzeug.datastructures.FileStorage, location='files')
+=======
+        parse.add_argument('images[]'  , action='append', type=werkzeug.datastructures.FileStorage, location='files')
+>>>>>>> 5e143c6459bb99e5e72a64f73ab3631571cc044d
         args = parse.parse_args()
 
         item = itemPropertyDB()
