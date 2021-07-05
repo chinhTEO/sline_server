@@ -32,21 +32,14 @@ class HelloWorld(Resource):
 class ItemProperty(Resource):
     def post(self):
         parse = reqparse.RequestParser()
-        parse.add_argument('QRid', required=True, type=int, location='form')
+        parse.add_argument('qrid', required=True, type=int, location='form')
         parse.add_argument('name', required=True, type=str, location='form')
         parse.add_argument('description', required=True, type=str, location='form')
 
-        parse.add_argument('size_1', required=True, type=int, location='form')
-        parse.add_argument('size_2', required=True, type=int, location='form')
-        parse.add_argument('size_3', required=True, type=int, location='form')
         parse.add_argument('color', required=True, type=str, location='form')
         parse.add_argument('function', required=True, type=str, location='form')
 
-        parse.add_argument('image_1', type=werkzeug.datastructures.FileStorage, location='files')
-        parse.add_argument('image_2', type=werkzeug.datastructures.FileStorage, location='files')
-        parse.add_argument('image_3', type=werkzeug.datastructures.FileStorage, location='files')
-        parse.add_argument('image_4', type=werkzeug.datastructures.FileStorage, location='files')
-
+        parse.add_argument('images'  , action='append', type=werkzeug.datastructures.FileStorage, location='files')
         args = parse.parse_args()
 
         item = itemPropertyDB()
@@ -60,12 +53,12 @@ class ItemProperty(Resource):
                 'msg': 'upload successfully'}
 
 class findItem(Resource):
-    def get(self,QRid):
-        print(QRid)
+    def get(self,qrid):
+        print(qrid)
         item = itemPropertyDB()
-        return item.getItemByID(QRid)
+        return item.getItemByID(qrid)
 
-api.add_resource(findItem,'/utility/check/<int:QRid>')
+api.add_resource(findItem,'/utility/check/<int:qrid>')
 api.add_resource(LookupItem,'/utility/lookup')
 api.add_resource(ItemProperty,'/new')
 api.add_resource(HelloWorld,'/')
