@@ -18,7 +18,6 @@ class LookupItem(Resource):
         args = parse.parse_args()
 
         result = sphixSeachClient.search(args['searchStr'])
-        print(result)
 
         return result
 
