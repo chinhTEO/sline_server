@@ -4,6 +4,7 @@ from serverCfg import ServerCfg
 from baseServices import db
 from flask import jsonify
 import uuid
+from sqlalchemy import *
 
 class itemPropertyDB(db.Model):
             __tablename__ = 'itemProperty'
@@ -28,11 +29,7 @@ class itemPropertyDB(db.Model):
                 self.description = args['description']
                 self.color = args['color']
                 self.function = args['function']
-<<<<<<< HEAD
                 self.images = args['images']
-=======
-                self.images = args['images[]']
->>>>>>> 5e143c6459bb99e5e72a64f73ab3631571cc044d
                 self.status = ""
                 self.enable = True
                 self.last_accessed_date = datetime.now()
@@ -70,3 +67,7 @@ class itemPropertyDB(db.Model):
                     
                 db.session.add(self)
                 db.session.commit()
+
+            def checkItem(self, qrid):
+                (ret, ), = db.session.query(exists().where(itemPropertyDB.qrid == qrid))
+                return ret

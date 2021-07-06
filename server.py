@@ -39,11 +39,7 @@ class ItemProperty(Resource):
         parse.add_argument('color', required=True, type=str, location='form')
         parse.add_argument('function', required=True, type=str, location='form')
 
-<<<<<<< HEAD
         parse.add_argument('images'  , action='append', type=werkzeug.datastructures.FileStorage, location='files')
-=======
-        parse.add_argument('images[]'  , action='append', type=werkzeug.datastructures.FileStorage, location='files')
->>>>>>> 5e143c6459bb99e5e72a64f73ab3631571cc044d
         args = parse.parse_args()
 
         item = itemPropertyDB()
@@ -58,11 +54,23 @@ class ItemProperty(Resource):
 
 class findItem(Resource):
     def get(self,qrid):
-        print(qrid)
         item = itemPropertyDB()
         return item.getItemByID(qrid)
 
-api.add_resource(findItem,'/utility/check/<int:qrid>')
+class checkItem(Resource):
+    def get(self,qrid):
+        item = itemPropertyDB()
+        status = item.checkItem(qrid)
+        if status == True:
+            return {'status': 'OK',
+                    'msg': 'existed'}
+        else:
+            return {'status': 'NOOK',
+                    'msg': 'not existed'}
+
+
+api.add_resource(findItem,'/utility/get/<int:qrid>')
+api.add_resource(checkItem,'/utility/check/<int:qrid>')
 api.add_resource(LookupItem,'/utility/lookup')
 api.add_resource(ItemProperty,'/new')
 api.add_resource(HelloWorld,'/')
