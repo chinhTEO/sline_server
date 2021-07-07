@@ -12,12 +12,21 @@ from baseServices import db, api, app, sphixSeachClient
 
 class LookupItem(Resource):
     def get(self):
+        result = {}
         parse = reqparse.RequestParser()
         parse.add_argument('searchStr', required=True, type=str, location='form')
         parse.add_argument('color', required=True, type=str, location='form')
         args = parse.parse_args()
 
-        result = sphixSeachClient.search(args['searchStr'])
+        sphixSeachResult = sphixSeachClient.search(args['searchStr'])
+
+        result['error'] = sphixSeachResult['error']
+        result['warning'] = sphixSeachResult['warning']
+        result['status'] = sphixSeachResult['status']
+        result['matches'] = sphixSeachResult['matches']
+        result['total'] = sphixSeachResult['total']
+        result['total_found'] = sphixSeachResult['total_found']
+        result['time'] = sphixSeachResult['time']
 
         return result
 
